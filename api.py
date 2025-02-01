@@ -1,12 +1,15 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import List
 import joblib
 import pandas as pd
+from typing import List
+from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
 
+"""
+ - Defining the FastAPI app 
+"""
 app = FastAPI()
 
-# Define the list of feature columns used during training.
+# Defining the feature columns
 feature_columns = [
     "temp", "feels_like", "temp_min", "temp_max",
     "humidity", "dew_point",
@@ -15,9 +18,9 @@ feature_columns = [
     "rain_1h", "rain_3h", "snow_1h", "snow_3h"
 ]
 
-# Define the input model for each day's forecast including all required fields.
+# Defining the request and response models
 class DayForecast(BaseModel):
-    date: str  # date in 'YYYY-MM-DD' format
+    date: str  
     temp: float
     feels_like: float
     temp_min: float
@@ -26,37 +29,71 @@ class DayForecast(BaseModel):
     dew_point: float
     wind_speed: float
     wind_deg: float
-    clouds_all: float  # or int, depending on your data
+    clouds_all: float 
     visibility: float
     rain_1h: float
     rain_3h: float
     snow_1h: float
     snow_3h: float
 
+# Defining the request model
 class ForecastRequest(BaseModel):
     forecast: List[DayForecast]
 
-# Load the trained model.
+# Loading the model
 try:
     model = joblib.load('ice_cream_sales_model.pkl')
 except Exception as e:
     raise HTTPException(status_code=500, detail="Model loading failed: " + str(e))
 
+# Endpoint for making predictions
 @app.post("/predict")
 def predict_sales(request: ForecastRequest):
-    # Convert the forecast JSON into a DataFrame.
+    """
+        - Parameters:
+            - request: ForecastRequest
+                - forecast: List[DayForecast]
+                    - date: str
+                    - temp: float
+                    - feels_like: float
+                    - temp_min: float
+                    - temp_max: float
+                    - humidity: float
+                    - dew_point: float
+                    - wind_speed: float
+                    - wind_deg: float
+                    - clouds_all: float
+                    - visibility: float
+                    - rain_1h: float
+                    - rain_3h: float
+                    - snow_1h: float
+                    - snow_3h: float
+        - Returns:
+            - predictions: List[Dict[str, Union[str, float]]]
+                - date: str
+                - Americana: float
+                - Cheesecake de Frambuesa: float
+                - Chocolate con Almendras: float
+                - Crema Oreo: float
+                - Dulce de Leche Granizado: float
+                - Maracuyá: float
+                
+                
+        - Description:
+            - This endpoint receives a list of DayForecast objects and returns a list of 
+                dictionaries with the predictions for each day.
+    """
+    
     data = pd.DataFrame([day.dict() for day in request.forecast])
     
-    # Select the features in the same order as used during training.
     X_new = data[feature_columns]
     
-    # Predict sales for each flavor (each row corresponds to a day)
+    # Making predictions
     try:
         preds = model.predict(X_new)
     except Exception as e:
         raise HTTPException(status_code=500, detail="Prediction failed: " + str(e))
     
-    # Define flavor names manually (adjust these names as per your model training output).
     flavor_names = [
         "Americana",
         "Cheesecake de Frambuesa",
@@ -66,15 +103,12 @@ def predict_sales(request: ForecastRequest):
         "Maracuyá"
     ]
     
-    # Create a JSON-friendly response containing predictions for each day.
+    # Creating the response
     response = []
     for i, prediction in enumerate(preds):
         day_result = {"date": data.iloc[i]["date"]}
-        # Map each flavor to its predicted sales.
         for flavor, pred in zip(flavor_names, prediction):
             day_result[flavor] = pred
         response.append(day_result)
     
     return {"predictions": response}
-
-# To run the API, use the command: uvicorn api:app --reload
