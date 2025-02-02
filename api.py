@@ -42,7 +42,7 @@ class ForecastRequest(BaseModel):
 
 # Loading the model
 try:
-    model = joblib.load('ice_cream_sales_model.pkl')
+    model = joblib.load('model/ice_cream_sales_model.pkl')
 except Exception as e:
     raise HTTPException(status_code=500, detail="Model loading failed: " + str(e))
 
