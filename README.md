@@ -51,7 +51,7 @@ Ensure you have the following installed on your system:
 ### Installation
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-username/ScoopCast.git
+   git clone https://github.com/aaqib-ahmed-nazir/ScoopCast.git
    cd ScoopCast
    ```
 
@@ -98,8 +98,7 @@ This will display the interactive Swagger UI for testing the API endpoints.
 
 ## API Endpoints
 The API provides the following endpoints:
-- `/predict-weather` - Get weather forecasts for the next 7 days.
-- `/predict-sales` - Retrieve sales predictions based on weather data.
+- `/predict` - Retrieve sales predictions based on weather data.
 ---
 
 ## Contributing
