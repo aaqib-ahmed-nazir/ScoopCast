@@ -1,6 +1,6 @@
-# ScoopCast: Ice Cream Sales and Weather Forecast Prediction
+# ScoopCast: Ice Cream Sales Prediction Based On Weather Forecast
 
- This project combines machine learning, weather forecasting, and sales predictions to provide actionable insights for ice cream businesses. Dive in to explore the features, setup instructions, and API interface using FastAPI.
+ This project combines machine learning, sales predictions to provide actionable insights for ice cream businesses. Dive in to explore the features, setup instructions, and API interface using FastAPI.
 
 ---
 
