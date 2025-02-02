@@ -3,3 +3,5 @@ __pycache__
 ice_cream_sales_model.pkl
 .DS_Store
 /testing
+/model
+Ice Cream Sales Prediction Model.pdf
