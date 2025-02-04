@@ -11,7 +11,7 @@ app = FastAPI()
 
 # Defining the feature columns
 feature_columns = [
-    "temp", "feels_like", "temp_min", "temp_max",
+    "day_of_week","temp", "feels_like", "temp_min", "temp_max",
     "humidity", "dew_point",
     "wind_speed", "wind_deg",
     "clouds_all", "visibility",
@@ -21,6 +21,7 @@ feature_columns = [
 # Defining the request and response models
 class DayForecast(BaseModel):
     date: str  
+    day_of_week: int
     temp: float
     feels_like: float
     temp_min: float
@@ -42,7 +43,7 @@ class ForecastRequest(BaseModel):
 
 # Loading the model
 try:
-    model = joblib.load('model/ice_cream_sales_model.pkl')
+    model = joblib.load('/Users/aaqibnazir/Documents/work/ScoopCast/model/ice_cream_sales_model.pkl')
 except Exception as e:
     raise HTTPException(status_code=500, detail="Model loading failed: " + str(e))
 
@@ -54,6 +55,7 @@ def predict_sales(request: ForecastRequest):
             - request: ForecastRequest
                 - forecast: List[DayForecast]
                     - date: str
+                    - day_of_week: int
                     - temp: float
                     - feels_like: float
                     - temp_min: float
