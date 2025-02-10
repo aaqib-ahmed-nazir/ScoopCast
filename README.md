@@ -100,12 +100,7 @@ This will display the interactive Swagger UI for testing the API endpoints.
 The API provides the following endpoints:
 - `/predict` - Retrieve sales predictions based on weather data.
 ---
-
-## Contributing
-Feel free to fork this repository, create a new branch, and submit a pull request. Suggestions and improvements are always welcome!
-
----
 ## License
-This project is licensed under the [MIT License](https://opensource.org/license/mit). See the LICENSE file for details.
+This project is licensed under the [MIT License](https://opensource.org/license/mit).
 
 ---
